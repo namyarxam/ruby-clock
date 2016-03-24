@@ -13,7 +13,7 @@
 class Clock
 
   def initialize
-    #preset to the current time
+    # preset to the current time
     @current_time = "%02d:%02d:%02d" % Time.now.to_a[0..2].reverse
     @alarms=[]
   end
@@ -25,19 +25,29 @@ class Clock
 
 
   def set_alarm(h,m)
-    # set an alarm
-    throw "I don't know what to do!"
+    if h < 10
+      h = '0'+h.to_s
+    end
+    if m < 10
+      m = '0'+h.to_s
+    end
+    @alarms.push("#{h}:#{m}:00")
+  end
+
+  def check_for_alarm
+    if @alarms.include? @current_time 
+      @alarms.delete_at(@alarms.index(@current_time))
+      puts "BRRINNNGGG"
+    end
   end
 
   def start_clock
-    # The clock should print out the current time every second 
-    throw "build me!"
-  end
-
-
-  def check_for_alarm
-    # check for an alarm and then display something
-    puts "BRRINNNGGG"
+    loop do
+      @current_time = "%02d:%02d:%02d" % Time.now.to_a[0..2].reverse
+      puts @current_time
+      check_for_alarm
+      sleep 1
+    end
   end
 
   class Alarm
@@ -48,6 +58,8 @@ class Clock
 end
 
 c = Clock.new
-c.set_time(9, 24)
-c.set_alarm(9,25)
-c.set_alarm(9,26)
+c.set_alarm(13, 59)
+c.start_clock
+# c.set_time(9, 24)
+# c.set_alarm(9,25)
+# c.set_alarm(9,26)
